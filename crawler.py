@@ -63,6 +63,6 @@ for i in range(last_page):
     if i < last_page - 1:
         driver.find_element_by_xpath("//*[@id=\"taplc_location_reviews_list_0\"]/div[22]/div/span[2]").click()
 
-    print("========================================")
+print("========================================")
 
 ta_df = pd.DataFrame({'Title': titles, 'Review': reviews, 'Rating': ratings})

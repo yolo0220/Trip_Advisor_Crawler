@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 
-driver = webdriver.Chrome('/home/jihoon_kim/.ChromeDriver/chromedriver')
+driver = webdriver.Chrome('chromedriver/chromedriver')
 driver.implicitly_wait(3)
 
 # access trip advisor page

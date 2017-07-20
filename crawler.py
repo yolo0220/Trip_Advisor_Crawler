@@ -8,7 +8,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
 
-driver = webdriver.Chrome('/home/jihoon_kim/.ChromeDriver/chromedriver')
+driver = webdriver.Chrome('chromedriver/chromedriver')
 driver.implicitly_wait(3)
 
 # access trip advisor page
@@ -32,6 +32,6 @@ time.sleep(5)
 soup = BeautifulSoup(driver.page_source, "html.parser")
 titles = [title.text for title in soup.find_all("span", {"class": "noQuotes"})]
 reviews = [review.text for review in soup.find_all("p", {"class": "partial_entry"})][2:]
-rating = []
+ratings = []
 for i in range(len(titles)):
     rating.append(int(soup.find_all("div", {"class": "rating reviewItemInline"})[i+2].find('span').get("class")[1][-2:]))

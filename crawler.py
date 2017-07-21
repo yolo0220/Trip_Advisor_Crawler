@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 
-driver = webdriver.Chrome('/home/jihoon_kim/.ChromeDriver/chromedriver')
+driver = webdriver.Chrome('./chromedriver/chromedriver')
 driver.implicitly_wait(3)
 
-sites = ['김광석']
+sites = ['여수 해상케이블카', '서울대공원', '남이섬']
 
 for site in range(len(sites)):
     # access trip advisor page

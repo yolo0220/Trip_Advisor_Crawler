@@ -12,7 +12,8 @@ import time
 driver = webdriver.Chrome('/home/jihoon_kim/.ChromeDriver/chromedriver')
 driver.implicitly_wait(3)
 
-sites = ['김광석']
+sites = ['경복궁', '덕수궁', '순천만 생태공원', '순천만정원', '순천 드라마 세트장']
+
 
 for site in range(len(sites)):
     # access trip advisor page
@@ -39,20 +40,20 @@ for site in range(len(sites)):
     dates = []
 
     for i in range(last_page):
-
         print("Crawling Process: %s / %s" % (i + 1, last_page))
         # Extract Latest Review
         time.sleep(2)
         latest_review_id = driver.find_element_by_xpath("//div[@class='reviewSelector']").get_attribute("id")
         id_num = latest_review_id.split('_')[1]
         target_path_for_more_button = "#" + "review_" + id_num
-        selector = target_path_for_more_button + " > div > div.ui_column.is-9 > div > div.wrap > div.prw_rup.prw_reviews_text_summary_hsx > div > p > span"
+        selector = target_path_for_more_button + " > div > div.ui_column.is-9 > div > div.wrap > \
+        div.prw_rup.prw_reviews_text_summary_hsx > div > p > span"
         time.sleep(3)
         try:
             driver.find_element_by_css_selector(selector).click()
         except:
             pass
-        time.sleep(4)
+        time.sleep(2)
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         titles.extend([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
@@ -60,7 +61,8 @@ for site in range(len(sites)):
         len_this_page = len([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
 
         for num_rate in range(len_this_page):
-            ratings.append(int(soup.find_all("div", {"class": "rating reviewItemInline"})[num_rate+2].find('span').get("class")[1][-2:-1]))
+            ratings.append(int(soup.find_all("div", {"class": "rating reviewItemInline"})[num_rate+2].find('span')\
+                               .get("class")[1][-2:-1]))
             dates.append(soup.find_all("span", {"class": "ratingDate relativeDate"})[num_rate].get('title'))
         if i < last_page - 1:
             driver.find_element_by_xpath("//*[@id=\"taplc_location_reviews_list_0\"]/div[22]/div/span[2]").click()

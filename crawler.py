@@ -16,6 +16,7 @@ root = tk.Tk()
 root.withdraw()
 file_path = filedialog.askopenfilename()
 
+
 print("Select your web-driver path: ")
 driver = webdriver.Chrome(file_path)
 driver.implicitly_wait(3)

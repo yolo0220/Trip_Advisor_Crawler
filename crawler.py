@@ -23,7 +23,7 @@ driver.implicitly_wait(3)
 lang = int(input("Choose the language: \n 1. English \n 2. Korean"))
 
 if lang==1:
-    webadr = "https://www.tripadvisor.com/Attractions"
+    webadr = "https://www.tripadvisor.co.us/Attractions"
 elif lang==2:
     webadr = "https://www.tripadvisor.co.kr/Attractions"
 else:

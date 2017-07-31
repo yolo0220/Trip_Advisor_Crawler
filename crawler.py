@@ -4,12 +4,20 @@ Created on 7/19/17
 Author: Jihoon Kim
 """
 
+
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
+import tkinter as tk
+from tkinter import filedialog
 
-driver = webdriver.Chrome('/home/jihoon_kim/.ChromeDriver/chromedriver')
+root = tk.Tk()
+root.withdraw()
+file_path = filedialog.askopenfilename()
+
+print("Select your web-driver path: ")
+driver = webdriver.Chrome(file_path)
 driver.implicitly_wait(3)
 
 lang = int(input("Choose the language: \n 1. English \n 2. Korean"))

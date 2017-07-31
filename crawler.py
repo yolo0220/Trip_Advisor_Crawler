@@ -12,19 +12,33 @@ import time
 driver = webdriver.Chrome('/home/jihoon_kim/.ChromeDriver/chromedriver')
 driver.implicitly_wait(3)
 
-sites = ['경복궁', '덕수궁', '순천만 생태공원', '순천만정원', '순천 드라마 세트장']
+lang = int(input("Choose the language: \n 1. English \n 2. Korean"))
 
+if lang==1:
+    webadr = "https://www.tripadvisor.com/Attractions"
+elif lang==2:
+    webadr = "https://www.tripadvisor.co.kr/Attractions"
+else:
+    raise ValueError("Wrong input.")
+
+print("Type the sites you want to crawl: ")
+sites = []
+while True:
+    site = input()
+    if site == 'quit':
+        break
+    sites.append(site)
 
 for site in range(len(sites)):
     # access trip advisor page
-    driver.get("https://www.tripadvisor.co.kr/Attractions")
+    driver.get(webadr)
 
     print("========================================")
     # Test Case
     driver.find_element_by_class_name("typeahead_input").clear()
     driver.find_element_by_class_name("typeahead_input").send_keys(sites[site])
     driver.find_element_by_id("SUBMIT_THINGS_TO_DO").click()
-    time.sleep(2)
+    time.sleep(3)
 
     # extract last page
     print("Crawling Starts on: " + sites[site])
@@ -42,7 +56,7 @@ for site in range(len(sites)):
     for i in range(last_page):
         print("Crawling Process: %s / %s" % (i + 1, last_page))
         # Extract Latest Review
-        time.sleep(2)
+        time.sleep(3)
         latest_review_id = driver.find_element_by_xpath("//div[@class='reviewSelector']").get_attribute("id")
         id_num = latest_review_id.split('_')[1]
         target_path_for_more_button = "#" + "review_" + id_num
@@ -53,7 +67,7 @@ for site in range(len(sites)):
             driver.find_element_by_css_selector(selector).click()
         except:
             pass
-        time.sleep(2)
+        time.sleep(3)
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         titles.extend([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
@@ -61,13 +75,17 @@ for site in range(len(sites)):
         len_this_page = len([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
 
         for num_rate in range(len_this_page):
-            ratings.append(int(soup.find_all("div", {"class": "rating reviewItemInline"})[num_rate+2].find('span')\
-                               .get("class")[1][-2:-1]))
+            if lang == 2:
+                ratings.append(int(soup.find_all("div", {"class": "rating reviewItemInline"})[num_rate+2].find('span')\
+                                   .get("class")[1][-2:-1]))
+            else:
+                ratings.append(int(soup.find_all("div", {"class": "rating reviewItemInline"})[num_rate].find('span') \
+                                   .get("class")[1][-2:-1]))
             dates.append(soup.find_all("span", {"class": "ratingDate relativeDate"})[num_rate].get('title'))
         if i < last_page - 1:
             driver.find_element_by_xpath("//*[@id=\"taplc_location_reviews_list_0\"]/div[22]/div/span[2]").click()
-        time.sleep(2)
-
+        time.sleep(3)
+    print("Crawling Completed: ", sites[site])
     print("========================================")
     ta_df = pd.DataFrame({'title': titles, 'review': reviews, 'rating': ratings, 'dates': dates})
     ta_df.to_csv(sites[site]+'.csv', encoding='utf-8')

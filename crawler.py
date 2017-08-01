@@ -30,7 +30,7 @@ elif lang == 2:
 else:
     raise ValueError("Wrong input.")
 
-print("Type the sites you want to crawl: ")
+print("Type the sites you want to crawl: (type 'quit' to end)")
 sites = []
 while True:
     site = input()

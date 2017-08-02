@@ -23,14 +23,14 @@ driver.implicitly_wait(3)
 
 lang = int(input("Choose the language: \n 1. English \n 2. Korean"))
 
-if lang==1:
-    webadr = "https://www.tripadvisor.com/Attractions"
-elif lang==2:
+if lang == 1:
+    webadr = "https://www.tripadvisor.co.uk/Attractions"
+elif lang == 2:
     webadr = "https://www.tripadvisor.co.kr/Attractions"
 else:
     raise ValueError("Wrong input.")
 
-print("Type the sites you want to crawl: ")
+print("Type the sites you want to crawl: (type 'quit' to end)")
 sites = []
 while True:
     site = input()
@@ -80,7 +80,7 @@ for site in range(len(sites)):
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         titles.extend([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
-        reviews.extend([review.text for review in soup.find_all("p", {"class": "partial_entry"})][2:])
+        reviews.extend([review.text for review in soup.find_all("p", {"class": "partial_entry"})][:])
         len_this_page = len([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
 
         for num_rate in range(len_this_page):
@@ -97,4 +97,4 @@ for site in range(len(sites)):
     print("Crawling Completed: ", sites[site])
     print("========================================")
     ta_df = pd.DataFrame({'title': titles, 'review': reviews, 'rating': ratings, 'dates': dates})
-    ta_df.to_csv(sites[site]+'.csv', encoding='utf-8')
+    ta_df.to_csv('./data/' + sites[site] + '.csv', encoding='utf-8')

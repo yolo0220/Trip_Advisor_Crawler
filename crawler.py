@@ -21,7 +21,7 @@ print("Select your web-driver path: ")
 driver = webdriver.Chrome(file_path)
 driver.implicitly_wait(3)
 
-lang = int(input("Choose the language: \n 1. English \n 2. Korean"))
+lang = int(input("Choose the language: \n 1. English \n 2. Korean\n"))
 
 if lang == 1:
     webadr = "https://www.tripadvisor.co.uk/Attractions"
@@ -80,7 +80,7 @@ for site in range(len(sites)):
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         titles.extend([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
-        reviews.extend([review.text for review in soup.find_all("p", {"class": "partial_entry"})][:])
+        reviews.extend([review.text for review in soup.find_all("p", {"class": "partial_entry"})][2:])
         len_this_page = len([title.text for title in soup.find_all("span", {"class": "noQuotes"})])
 
         for num_rate in range(len_this_page):
@@ -92,7 +92,7 @@ for site in range(len(sites)):
                                    .get("class")[1][-2:-1]))
             dates.append(soup.find_all("span", {"class": "ratingDate relativeDate"})[num_rate].get('title'))
         if i < last_page - 1:
-            driver.find_element_by_xpath("//*[@id=\"taplc_location_reviews_list_0\"]/div[22]/div/span[2]").click()
+            driver.find_element_by_css_selector('#taplc_location_reviews_list_0 > div.prw_rup.prw_common_north_star_pagination > div > span.nav.next.taLnk').click()
         time.sleep(3)
     print("Crawling Completed: ", sites[site])
     print("========================================")
